@@ -10,7 +10,7 @@ local playerpos = false
 
 Citizen.CreateThread(function()
     while(true) do
-		oPlayer = GetPlayerPed(-1)
+		oPlayer = PlayerPedId()
         InVehicle = IsPedInAnyVehicle(oPlayer, true)
 		playerpos = GetEntityCoords(oPlayer)
         Citizen.Wait(500)
@@ -143,7 +143,7 @@ Citizen.CreateThread(function()
 										SetPedKeepTask(dealer2, true)
 										GiveWeaponToPed(dealer, GetHashKey('WEAPON_PISTOL50'),250,false,true)
 										GiveWeaponToPed(dealer2, GetHashKey('WEAPON_PISTOL50'),250,false,true)
-										local playerped = GetPlayerPed(-1)
+										local playerped = PlayerPedId()
 										AddRelationshipGroup('DrugsNPC')
 								AddRelationshipGroup('PlayerPed')
 								SetPedRelationshipGroupHash(dealer, 'DrugsNPC')

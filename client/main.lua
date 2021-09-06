@@ -10,7 +10,7 @@ local playerpos = false
 
 Citizen.CreateThread(function()
     while(true) do
-		oPlayer = GetPlayerPed(-1)
+		oPlayer = PlayerPedId()
         InVehicle = IsPedInAnyVehicle(oPlayer, true)
 		playerpos = GetEntityCoords(oPlayer)
         Citizen.Wait(500)
@@ -162,8 +162,8 @@ end)
 
 RegisterNetEvent("bobs_drugs:activate_weed")
 AddEventHandler("bobs_drugs:activate_weed",function()
-    local ped = GetPlayerPed(-1)
-	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+    local ped = PlayerPedId()
+	if not IsPedInAnyVehicle(PlayerPedId()) then
 		exports.rprogress:Custom({
 								Async = true,
 								x = 0.5,
@@ -239,8 +239,8 @@ end)
 RegisterNetEvent('coke:onUse')
 AddEventHandler('coke:onUse', function(source)
 	ESX.ShowNotification("You used ~r~Cocaine~s~")
-	local crackhead = GetPlayerPed(-1)
-	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+	local crackhead = PlayerPedId()
+	if not IsPedInAnyVehicle(PlayerPedId()) then
 		exports.rprogress:Custom({
 								Async = true,
 								x = 0.5,
@@ -317,8 +317,8 @@ end)
 RegisterNetEvent('meth:onUse')
 AddEventHandler('meth:onUse', function(source)
 	ESX.ShowNotification("You used ~r~Meth~s~")
-	local crackhead = GetPlayerPed(-1)
-	if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+	local crackhead = PlayerPedId()
+	if not IsPedInAnyVehicle(PlayerPedId()) then
 		exports.rprogress:Custom({
 								Async = true,
 								x = 0.5,
