@@ -51,7 +51,7 @@ end
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-            local plyCoords = GetEntityCoords(PlayerPedId(), false) 
+            local plyCoords = GetEntityCoords(GetPlayerPed(-1), false) 
             local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, cokemission.x, cokemission.y, cokemission.z)
 
 			if dist <= 25.0  then				
@@ -96,7 +96,7 @@ Citizen.CreateThread(function()
 							Citizen.Wait(10000)
 							ESX.ShowNotification("Wait for location of ~b~Drug Shipment~s~!")
 							TriggerServerEvent("Scully:StartTimer", 20)
-							ClearPedTasks(PlayerPedId())
+							ClearPedTasks(GetPlayerPed(-1))
 							local waitdrop = math.random(15000, 30000)
 							Citizen.Wait(waitdrop)
 							TriggerEvent("bobs_drugs:startTheEvent", 'coke')
@@ -116,7 +116,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-            local plyCoords = GetEntityCoords(PlayerPedId(), false) 
+            local plyCoords = GetEntityCoords(GetPlayerPed(-1), false) 
             local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, methmission.x, methmission.y, methmission.z)
 
 			if dist <= 25.0  then
@@ -162,7 +162,7 @@ Citizen.CreateThread(function()
 							Citizen.Wait(10000)
 							ESX.ShowNotification("Wait for location of ~b~Drug Shipment~s~!")
 							TriggerServerEvent("Scully:StartTimer", 20)
-							ClearPedTasks(PlayerPedId())
+							ClearPedTasks(GetPlayerPed(-1))
 							local waitdrop = math.random(15000, 30000)
 							Citizen.Wait(waitdrop)
 							TriggerEvent("bobs_drugs:startTheEvent", 'meth')	
@@ -187,13 +187,13 @@ AddEventHandler("bobs_drugs:startTheEvent",function(drug)
 	local num = math.random(1,#Config.MissionPosition)
 	local loc = Config.MissionPosition[num]
 	local typed = drug
-	local playerped = PlayerPedId()
+	local playerped = GetPlayerPed(-1)
 	local taken = false
 	local blip = CreateMissionBlip(loc.Location)
 	while not taken and not StopMission do
 		Citizen.Wait(10)
 		
-		if GetDistanceBetweenCoords(loc.Location, GetEntityCoords(PlayerPedId())) < 2.5 then
+		if GetDistanceBetweenCoords(loc.Location, GetEntityCoords(GetPlayerPed(-1))) < 2.5 then
 			ESX.Game.Utils.DrawText3D(loc.Location,"Press [~g~E~s~] to take the ~b~bobs_drugs~s~",.5,0)
 			if IsControlJustReleased(1,38) then
 					exports.rprogress:Custom({
@@ -224,8 +224,8 @@ AddEventHandler("bobs_drugs:startTheEvent",function(drug)
 								},
 								})
 					Citizen.Wait(10000)
-					--ClearPedTasks(PlayerPedId())
-					if GetDistanceBetweenCoords(loc.Location, GetEntityCoords(PlayerPedId())) < 2.5 then
+					--ClearPedTasks(GetPlayerPed(-1))
+					if GetDistanceBetweenCoords(loc.Location, GetEntityCoords(GetPlayerPed(-1))) < 2.5 then
 					ESX.ShowNotification("~g~Completed:~s~ You collected the drugs!")
 							if typed == "coke" then
 								TriggerServerEvent("bobs_drugs:cokereward")
@@ -236,25 +236,25 @@ AddEventHandler("bobs_drugs:startTheEvent",function(drug)
 					while not HasAnimDictLoaded("anim@heists@box_carry@") do
 					Citizen.Wait(1)
 					end
-					TaskPlayAnim(PlayerPedId(),"anim@heists@box_carry@","idle",1.0, -1.0, -1, 49, 0, 0, 0, 0)
+					TaskPlayAnim(GetPlayerPed(-1),"anim@heists@box_carry@","idle",1.0, -1.0, -1, 49, 0, 0, 0, 0)
 					Citizen.Wait(300)
 						attachModel = GetHashKey('prop_mp_drug_package')
 						boneNumber = 28422
-						SetCurrentPedWeapon(PlayerPedId(), 0xA2719263) 
-						local bone = GetPedBoneIndex(PlayerPedId(), boneNumber)
+						SetCurrentPedWeapon(GetPlayerPed(-1), 0xA2719263) 
+						local bone = GetPedBoneIndex(GetPlayerPed(-1), boneNumber)
 						RequestModel(attachModel)
 							while not HasModelLoaded(attachModel) do
 								Citizen.Wait(100)
 							end
 							attachedProp = CreateObject(attachModel, 1.0, 1.0, 1.0, 1, 1, 0)
-							AttachEntityToEntity(attachedProp, PlayerPedId(), bone, 0.0, 0.0, 0.0, 135.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+							AttachEntityToEntity(attachedProp, GetPlayerPed(-1), bone, 0.0, 0.0, 0.0, 135.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
 				
 					RemoveBlip(blip)
 					Config.MissionPosition[num].InUse = false
 					TriggerServerEvent("bobs_drugs:syncMissionData",Config.MissionPosition)
 					taken = true
 					Citizen.Wait(5000)
-					ClearPedTasks(PlayerPedId())
+					ClearPedTasks(GetPlayerPed(-1))
 					RemoveAnimDict("anim@heists@box_carry@")
 					DeleteEntity(attachedProp)
 					break

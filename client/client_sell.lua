@@ -10,7 +10,7 @@ local playerpos = false
 
 Citizen.CreateThread(function()
     while(true) do
-		oPlayer = PlayerPedId()
+		oPlayer = GetPlayerPed(-1)
         InVehicle = IsPedInAnyVehicle(oPlayer, true)
 		playerpos = GetEntityCoords(oPlayer)
         Citizen.Wait(500)
@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
 				for i=1, #inventory, 1 do
 				if inventory[i].name == 'weed' or inventory[i].name == 'coke' or inventory[i].name == 'meth' then
 				count = inventory[i].count
-				if not InVehicle and not IsEntityDead(PlayerPedId()) and count > 0 then
+				if not InVehicle and not IsEntityDead(GetPlayerPed(-1)) and count > 0 then
 					drawText3D(pos.x, pos.y, pos.z + 1.0, '⚙️')				
 					while IsControlPressed(0, 38) do
 					drawText3D(pos.x, pos.y, pos.z + 1.0, 'Press [~g~H~s~] to offer ~b~ DRUGS ~s~')
@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 								SetEntityHeading(ped,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y)+200)
 								SetEntityHeading(oPlayer,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y))
 									entity = ped
-									--TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_DRUG_DEALER_HARD", 0, true)
+									--TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER_HARD", 0, true)
 									--exports['progressBars']:startUI(13000, "NEGOTIATING PRICE")
 								exports.rprogress:Custom({
 								Async = true,
@@ -143,7 +143,7 @@ Citizen.CreateThread(function()
 										SetPedKeepTask(dealer2, true)
 										GiveWeaponToPed(dealer, GetHashKey('WEAPON_PISTOL50'),250,false,true)
 										GiveWeaponToPed(dealer2, GetHashKey('WEAPON_PISTOL50'),250,false,true)
-										local playerped = PlayerPedId()
+										local playerped = GetPlayerPed(-1)
 										AddRelationshipGroup('DrugsNPC')
 								AddRelationshipGroup('PlayerPed')
 								SetPedRelationshipGroupHash(dealer, 'DrugsNPC')
