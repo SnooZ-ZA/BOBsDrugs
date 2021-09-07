@@ -194,7 +194,7 @@ AddEventHandler("bobs_drugs:startTheEvent",function(drug)
 		Citizen.Wait(10)
 		
 		if GetDistanceBetweenCoords(loc.Location, GetEntityCoords(GetPlayerPed(-1))) < 2.5 then
-			ESX.Game.Utils.DrawText3D(loc.Location,"Press [~g~E~s~] to take the ~b~bobs_drugs~s~",.5,0)
+			ESX.Game.Utils.DrawText3D(loc.Location,"Press [~g~E~s~] to take the ~b~Drugs~s~",.5,0)
 			if IsControlJustReleased(1,38) then
 					exports.rprogress:Custom({
 								Async = true,
