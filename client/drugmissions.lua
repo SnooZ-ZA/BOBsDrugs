@@ -134,7 +134,7 @@ Citizen.CreateThread(function()
 								},
 							})
 							Citizen.Wait(10000)
-							ShowAdvancedNotification('CHAR_MP_MEX_DOCKS', '~y~BOSS~s~', '~b~Confirmed~s~', 'Wait for confirmation of ~b~Drug Shipment~s~!')
+							ShowAdvancedNotification('CHAR_MP_MEX_DOCKS', '~y~BOSS~s~', '~b~Confirmed~s~', 'Wait for my call of ~b~Drug Shipment~s~!')
 							TriggerServerEvent("Scully:StartTimer", Config.Timer)
 							ClearPedTasks(PlayerPedId())
 							local waitdrop = math.random(15000, 30000)
