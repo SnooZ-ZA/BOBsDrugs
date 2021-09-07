@@ -10,7 +10,7 @@ local playerpos = false
 
 Citizen.CreateThread(function()
     while(true) do
-		oPlayer = GetPlayerPed(-1)
+		oPlayer = PlayerPedId()
         InVehicle = IsPedInAnyVehicle(oPlayer, true)
 		playerpos = GetEntityCoords(oPlayer)
         Citizen.Wait(500)
@@ -21,10 +21,6 @@ local relationshipTypes = {
   "s_m_y_dealer_01",
 } 
 
-RequestAnimDict("mp_common")
-RequestAnimDict("cellphone@str")
-RequestAnimDict("amb@prop_human_parking_meter@male@base")
-RequestAnimDict("misscarsteal4@actor")
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1)
@@ -40,7 +36,7 @@ Citizen.CreateThread(function()
 				for i=1, #inventory, 1 do
 				if inventory[i].name == 'weed' or inventory[i].name == 'coke' or inventory[i].name == 'meth' then
 				count = inventory[i].count
-				if not InVehicle and not IsEntityDead(GetPlayerPed(-1)) and count > 0 then
+				if not InVehicle and not IsEntityDead(PlayerPedId()) and count > 0 then
 					drawText3D(pos.x, pos.y, pos.z + 1.0, '⚙️')				
 					while IsControlPressed(0, 38) do
 					drawText3D(pos.x, pos.y, pos.z + 1.0, 'Press [~g~H~s~] to offer ~b~ DRUGS ~s~')
@@ -57,8 +53,6 @@ Citizen.CreateThread(function()
 								SetEntityHeading(ped,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y)+200)
 								SetEntityHeading(oPlayer,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y))
 									entity = ped
-									--TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER_HARD", 0, true)
-									--exports['progressBars']:startUI(13000, "NEGOTIATING PRICE")
 								exports.rprogress:Custom({
 								Async = true,
 								x = 0.5,
@@ -87,18 +81,33 @@ Citizen.CreateThread(function()
 								},
 								})
 									Citizen.Wait(5000)
+									RequestAnimDict('amb@prop_human_parking_meter@male@base')
+									while not HasAnimDictLoaded('amb@prop_human_parking_meter@male@base') do
+									Citizen.Wait(50)
+									end
 									TaskPlayAnim(ped, "amb@prop_human_parking_meter@male@base", "base", 8.0, 8.0, 10000, 0, 1, 0,0,0)
+									RemoveAnimDict('amb@prop_human_parking_meter@male@base')	
 									Citizen.Wait(10)
+									RequestAnimDict('mp_common')
+									while not HasAnimDictLoaded('mp_common') do
+									Citizen.Wait(50)
+									end
 									TaskPlayAnim(oPlayer, "mp_common", "givetake2_a", 8.0, 8.0, 2000, 0, 1, 0,0,0)
 									Citizen.Wait(3000)
 									TaskPlayAnim(ped, "mp_common", "givetake2_a", 8.0, 8.0, 2000, 0, 1, 0,0,0)
+									RemoveAnimDict('mp_common')
 									TriggerServerEvent("esx_Drugs:sellDrugs")
 						else
 							chance2 = math.random(1,2)
 							if chance2 == 1 then
 								oldped = ped
+								RequestAnimDict('cellphone@str')
+								while not HasAnimDictLoaded('cellphone@str') do
+									Citizen.Wait(50)
+								end
 								TaskPlayAnim(ped, "cellphone@str", "f_cellphone_call_listen_maybe_a", 8.0, 8.0, 20000, 0, 1, 0,0,0)
 								Citizen.Wait(3000)
+								RemoveAnimDict('cellphone@str')								
 								ESX.TriggerServerCallback('bobs_weed:cops', function(CopsConnected)
 								if CopsConnected >= Config.cops then
 									ESX.ShowNotification("The person ~r~rejected~s~ your offer and called the ~r~cops~s~ with a description!")
@@ -112,8 +121,7 @@ Citizen.CreateThread(function()
 								RequestModel("s_m_y_dealer_01")
 									while not HasModelLoaded("s_m_y_dealer_01") do
 									Wait(10)
-									end
-									
+									end									
 								RequestModel("voodoo2")
 									while not HasModelLoaded("voodoo2") do
 									Wait(10)
@@ -143,7 +151,7 @@ Citizen.CreateThread(function()
 										SetPedKeepTask(dealer2, true)
 										GiveWeaponToPed(dealer, GetHashKey('WEAPON_PISTOL50'),250,false,true)
 										GiveWeaponToPed(dealer2, GetHashKey('WEAPON_PISTOL50'),250,false,true)
-										local playerped = GetPlayerPed(-1)
+										local playerped = PlayerPedId()
 										AddRelationshipGroup('DrugsNPC')
 								AddRelationshipGroup('PlayerPed')
 								SetPedRelationshipGroupHash(dealer, 'DrugsNPC')
@@ -153,6 +161,8 @@ Citizen.CreateThread(function()
 								Citizen.Wait(60000)
 								if DoesEntityExist(dealer) then
 								DeleteEntity(dealer)
+								end
+								if DoesEntityExist(dealer2) then
 								DeleteEntity(dealer2)
 								end
 								if DoesEntityExist(dealerveh) then
@@ -168,8 +178,13 @@ Citizen.CreateThread(function()
 								oldped = ped
 								SetEntityHeading(ped,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y)+180)
 								SetEntityHeading(oPlayer,GetHeadingFromVector_2d(pos.x-playerpos.x,pos.y-playerpos.y))
+								RequestAnimDict('misscarsteal4@actor')
+								while not HasAnimDictLoaded('misscarsteal4@actor') do
+									Citizen.Wait(50)
+								end
 								TaskPlayAnim(ped, "misscarsteal4@actor", "actor_berating_loop", 8.0, 8.0, 5000, 0, 1, 0,0,0)
 								Citizen.Wait(3000)
+								RemoveAnimDict('misscarsteal4@actor')
 								ESX.ShowNotification("The person ~r~rejected~s~ your offer")
 							end
 						end
@@ -185,13 +200,6 @@ Citizen.CreateThread(function()
 			end
 		until not success
 		EndFindPed(handle)
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		TriggerServerEvent("esx_Drugs:canSellDrugs")
-		Citizen.Wait(10000)
 	end
 end)
 
@@ -211,14 +219,6 @@ function CanSellToPed(ped)
 	end
 	return false
 end
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(3000)
-		streetName,_ = GetStreetNameAtCoord(playerpos.x, playerpos.y, playerpos.z)
-		streetName = GetStreetNameFromHashKey(streetName)
-	end
-end)
 
 RegisterNetEvent('bobs_weed:callCops')
 AddEventHandler('bobs_weed:callCops', function(suspect)

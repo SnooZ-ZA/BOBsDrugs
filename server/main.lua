@@ -4,40 +4,12 @@ TriggerEvent('esx:getSharedObject', function(obj)
 	ESX = obj
 end)
 
-local PlayerDrugsTimer = {}
-
-RegisterServerEvent("bobs_drugs:startDrugsTimer") 
-AddEventHandler("bobs_drugs:startDrugsTimer",function(source)
-	table.insert(PlayerDrugsTimer,{startedDrugs = GetPlayerIdentifier(source), timeDrugs = 30000}) -- do not touch this
-end)
-
-Citizen.CreateThread(function() -- do not touch this thread function!
-	while true do
-	Citizen.Wait(1000)
-		for k,v in pairs(PlayerDrugsTimer) do
-			if v.timeDrugs <= 0 then
-				RemoveStartedDrugs(v.startedDrugs)
-			else
-				v.timeDrugs = v.timeDrugs - 1000
-			end
-		end
-	end
-end)
-
 RegisterServerEvent('esx_weed:getItem')
 AddEventHandler('esx_weed:getItem', function()
 local player = ESX.GetPlayerFromId(source)
 local randomWeed = math.random(2, 5)
    player.addInventoryItem('weed', randomWeed)
 end)
-
-function GetTimeForDrugs(source)
-	for k,v in pairs(PlayerDrugsTimer) do
-		if v.startedDrugs == source then
-			return math.ceil(v.timeDrugs/1000)
-		end
-	end
-end
 
 RegisterServerEvent('bobs_weed:harvest')
 AddEventHandler('bobs_weed:harvest', function(suspect)
@@ -51,7 +23,6 @@ AddEventHandler('bobs_weed:harvest', function(suspect)
 end)
 
 -- // ## DRUGS MISSION REWARDS ## // --
-
 RegisterServerEvent("bobs_drugs:cokereward")
 AddEventHandler("bobs_drugs:cokereward",function()
 	local _source = source
@@ -67,7 +38,6 @@ AddEventHandler("bobs_drugs:methreward",function()
     xPlayer.addInventoryItem('meth', math.random(30,50))
 	TriggerEvent("Scully:ResetTimer")
 end)
-
 
 -- // ## DRUGS EFFECT ## // --
 ESX.RegisterUsableItem('weed', function(source)

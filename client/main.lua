@@ -19,7 +19,7 @@ end)
 
 closestWeed = {
 	"prop_weed_01",
-	--"prop_weed_02",
+	"prop_weed_02",
 	"bkr_prop_weed_lrg_01b",
 	"bkr_prop_weed_med_01b"
 }
@@ -118,35 +118,6 @@ Citizen.CreateThread(function()
         end
         Citizen.Wait(sleep)
     end
-end)
-
-Citizen.CreateThread(function()
-    Citizen.Wait(100)
-    while true do
-
-        local sleep = 1000
-
-        if percent then
-
-            local playerPed = GetPlayerPed(-1)
-            local playerCoords = GetEntityCoords(playerPed)
-
-            for i = 1, #closestWeed do
-
-                local x = GetClosestObjectOfType(playerCoords, 1.0, GetHashKey(closestWeed[i]), false, false, false)
-                local entity = nil
-                
-                if DoesEntityExist(x) then
-                    sleep  = 5
-                    entity = x
-                    weed   = GetEntityCoords(entity)
-                    drawText3D(weed.x, weed.y, weed.z + 1.5, TimeLeft .. '~g~%~s~')
-                    break
-                end
-            end
-        end
-        Citizen.Wait(sleep)
-	end
 end)
 
 Citizen.CreateThread(function()

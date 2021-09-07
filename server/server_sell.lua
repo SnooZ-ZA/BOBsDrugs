@@ -1,7 +1,7 @@
 -- // ## DRUG SALE ## // --
 ESX = nil
 Config = {}
-Config.cops = 1
+Config.cops = 0
 local CopsConnected  = 0
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
@@ -22,7 +22,6 @@ CountCops()
 
 ESX.RegisterServerCallback('bobs_weed:cops', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
-
 	cb(CopsConnected)
 end)
 
@@ -36,7 +35,6 @@ AddEventHandler("esx_Drugs:sellDrugs", function()
 	local drugamount = 0
 	local price = 0
 	local drugType = nil
-	
 	if weed > 0 then
 		drugType = 'weed'
 		if weed == 1 then
@@ -47,8 +45,7 @@ AddEventHandler("esx_Drugs:sellDrugs", function()
 			drugamount = math.random(1,3)
 		elseif weed >= 4 then	
 			drugamount = math.random(1,4)
-		end
-		
+		end	
 	elseif coke > 0 then
 		drugType = 'coke'
 		if coke == 1 then
@@ -58,7 +55,6 @@ AddEventHandler("esx_Drugs:sellDrugs", function()
 		elseif coke >= 3 then	
 			drugamount = math.random(1,3)
 		end
-
 	elseif meth > 0 then
 		drugType = 'meth'
 		if meth == 1 then
@@ -68,20 +64,17 @@ AddEventHandler("esx_Drugs:sellDrugs", function()
 		elseif meth >= 3 then	
 			drugamount = math.random(1,3)
 		end	
-	
 	else
 		TriggerClientEvent('esx:showNotification', _source, "You have ~r~no more~r~ ~y~drugs~s~ on you")
 		return
-	end
-	
+	end	
 	if drugType=='weed' then
 		price = math.random(100,120) * 2 * drugamount		
 	elseif drugType=='coke' then
 		price = math.random(140,160) * 2 * drugamount
 	elseif drugType=='meth' then
 		price = math.random(120,140) * 2 * drugamount
-	end
-	
+	end	
 	if drugType ~= nil then
 		xPlayer.removeInventoryItem(drugType, drugamount)
 	end
@@ -94,7 +87,6 @@ AddEventHandler("esx_Drugs:sellDrugs", function()
 	elseif drugType=='meth' then
 	TriggerClientEvent('esx:showNotification', _source, "You sold ~b~"..drugamount.."x~s~ ~y~Meth~s~ for ~r~$" .. price)
 	end
-	
 end)
 
 RegisterServerEvent('bobs_weed:reject')
