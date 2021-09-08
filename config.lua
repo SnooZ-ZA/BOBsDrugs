@@ -1,8 +1,8 @@
 Config = {}
 
-Config.cops = 1
+Config.cops = 1 -- cops required to disable kingpin
 
-Config.Timer = 10
+Config.Timer = 10 -- time a player has to collect a drug shipment
 
 -- // MISSION LOCATIONS // --
 Config.MissionPosition = 
